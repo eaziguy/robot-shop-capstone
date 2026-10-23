@@ -1,0 +1,25 @@
+groups:
+  - name: kubernetes-workload-alerts
+    rules:
+      - alert: PodContainerRestarting
+        expr: increase(kube_pod_container_status_restarts_total[15m]) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: robot-shop
+        annotations:
+          summary: "Container is restarting repeatedly"
+          description: "A container in pod {{ $labels.namespace }}/{{ $labels.pod }} restarted more than twice in 15 minutes. Inspect pod events and previous logs."
+
+      - alert: PodNotReady
+        expr: kube_pod_status_ready{condition="true", namespace="robot-shop"} == 0
+        for: 5m
+        labels:
+          severity: warning
+          service: robot-shop
+        annotations:
+          summary: "Robot Shop pod is not Ready"
+          description: "Pod {{ $labels.pod }} in namespace robot-shop has not been Ready for 5 minutes."
+
+# Requires kube-state-metrics to provide kube_pod_* metrics.
+# These are infrastructure alerts, not request-based SLO burn-rate alerts.
