@@ -1,9 +1,9 @@
-﻿#
+#
 # Build the app
 #
 FROM php:7.4-apache
 
-RUN apt-get update && apt-get install -yqq --fix-missing unzip libzip-dev \
+RUN apt-get update -o Acquire::Retries=3 && apt-get install -yqq --no-install-recommends unzip libzip-dev \
     && docker-php-ext-install pdo_mysql opcache zip
 
 # Enable AutoProfile for PHP which is currently opt-in beta
