@@ -1,9 +1,9 @@
-#
+﻿#
 # Build the app
 #
 FROM php:7.4-apache
 
-RUN apt-get update && apt-get install -yqq unzip libzip-dev \
+RUN apt-get update && apt-get install -yqq --fix-missing unzip libzip-dev \
     && docker-php-ext-install pdo_mysql opcache zip
 
 # Enable AutoProfile for PHP which is currently opt-in beta
@@ -28,4 +28,5 @@ RUN composer install
 RUN rm -Rf /var/www/var/*
 RUN chown -R www-data /var/www
 RUN chmod -R 777 /var/www
+
 
